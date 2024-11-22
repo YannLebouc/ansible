@@ -1,0 +1,47 @@
+- hosts: localhost
+  vars:
+    dotfiles_path: /home/{{ user }}/.dotfiles
+
+  tasks:
+    - name: Add RPM Fusion Repository
+      command:
+        cmd: sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+        warn: false
+        
+    - name: Upgrade system packages
+      dnf:
+        name: "*"
+        state: latest
+
+    - name: Add user specific packages
+      dnf:
+        name:
+          - code
+          - compton
+          - alacritty
+          - feh
+          - xrandr
+          - conky
+          - rofi
+          - tmux
+          - xss-lock
+          - ImageMagick
+          - stow
+          - neovim python3-neovim
+          - newsboat
+          - picom
+          - pavucontrol
+          - redshift redshift-gtk
+
+    - name: Fetch dotfiles git repository
+      become: true
+      become_user: "{{ user }}"
+      git:
+        repo: 'https://github.com/YannLebouc/.dotfiles.git'
+        dest: "{{ dotfiles_path }}"
+
+    - name: Make symbolic links with dotfiles
+      become: true
+      become_user: "{{ user }}"
+      command:
+        cmd: "{{ dotfiles_path }}/.config-symlinks.sh"
