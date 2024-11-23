@@ -32,6 +32,9 @@
           - picom
           - pavucontrol
           - redshift redshift-gtk
+          - maim
+          - xclip
+          - xdotool
 
     - name: Fetch dotfiles git repository
       become: true
