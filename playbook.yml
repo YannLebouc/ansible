@@ -1,13 +1,8 @@
 - hosts: localhost
   vars:
     dotfiles_path: /home/{{ user }}/.dotfiles
-
+  
   tasks:
-    - name: Add RPM Fusion Repository
-      command:
-        cmd: sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-        warn: false
-        
     - name: Upgrade system packages
       dnf:
         name: "*"
@@ -17,7 +12,6 @@
       dnf:
         name:
           - code
-          - compton
           - alacritty
           - feh
           - xrandr
@@ -27,11 +21,11 @@
           - xss-lock
           - ImageMagick
           - stow
-          - neovim python3-neovim
+          - neovim, python3-neovim
           - newsboat
           - picom
           - pavucontrol
-          - redshift redshift-gtk
+          - redshift, redshift-gtk
           - maim
           - xclip
           - xdotool
